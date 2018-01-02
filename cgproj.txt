@@ -1,0 +1,1026 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <GL/glut.h>
+#include <math.h>
+#include <string.h>             //overleaf, latex
+#define PI 3.1415927
+#define MAX_NUM_PARTICLES 100
+int heigh=0.1;float ang=0,angle=0,angle1=0;
+GLint axis;float l=0,heit=0.0,low=0.0;
+int flag=0;int flags;
+float movx=-0.8,movy=1.1,movz=-5.0;
+float movxc=-1.6,movyc=0.4;
+float start;
+
+
+float R=0.4,G=0.4,B=0.4;
+float red=0.4,g=0.4,b=.4;
+float cirr=0.4,cirg=0.4,cirb=0.4;
+
+
+float shadx=0.9,shady=-1.5,shadz;
+float backang,bX,bY,bZ;
+GLuint view;
+float i=0.0;int count=0;float h=0.2,r=0.08;
+float ballX = 0.0f;float addX=0.0f;float X=0.0,boxX=0.0f;
+float ballY = 0.0f;float addY=0.0f;float Y=0.0,boxY=0.0f;
+float ballZ = 0.0f;float addZ=0.0f;float Z=0.0,boxZ=0.0f;
+static int tag=0;
+
+
+void draw_cylinder(GLfloat radius,
+                   GLfloat height,
+                   GLubyte R,
+                   GLubyte G,
+                   GLubyte B)
+{
+        GLfloat x              = 0.0;
+        GLfloat y              = 0.0;
+        GLfloat angle          = 0.0;
+        GLfloat angle_stepsize = 0.1;
+        glEnable(GL_BLEND|GL_DEPTH_TEST);
+        glColor4f(0.9,0.9,0.9,1.0);
+        glBegin(GL_QUAD_STRIP);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(0.8,0.8,0.8);
+            glVertex3f(x, y , height);glColor3f(0.8,0.8,0.8);
+            glVertex3f(x, y , 0.0);
+            angle = angle + angle_stepsize;
+        }
+        glVertex3f(radius, 0.0, height);
+        glVertex3f(radius, 0.0, 0.0);
+        glEnd();
+        glColor4f(0.80,0.80,0.80,2.90);
+        glBegin(GL_POLYGON);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(0.7,0.7,0.7);
+            glVertex3f(x, y , height);
+            angle = angle + angle_stepsize;
+        }
+        glVertex3f(radius, 0.0, height);
+        glEnd();
+}
+void draw_cylinderwhite(GLfloat radius,
+                   GLfloat height,
+                   GLubyte R,
+                   GLubyte G,
+                   GLubyte B)
+{
+        GLfloat x              = 0.0;
+        GLfloat y              = 0.0;
+        GLfloat angle          = 0.0;
+        GLfloat angle_stepsize = 0.1;
+        glEnable(GL_BLEND|GL_DEPTH_TEST);
+        glColor4f(0.9,0.9,0.9,1.0);
+        glBegin(GL_QUAD_STRIP);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(0.9,0.9,0.9);
+            glVertex3f(x, y , height);glColor3f(0.95,0.95,0.95);
+            glVertex3f(x, y , 0.0);
+            angle = angle + angle_stepsize;
+        }
+        glVertex3f(radius, 0.0, height);
+        glVertex3f(radius, 0.0, 0.0);
+        glEnd();
+        glColor4f(0.85,0.85,0.85,2.90);
+        glBegin(GL_POLYGON);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(0.85,0.85,0.85);
+            glVertex3f(x, y , height);
+            angle = angle + angle_stepsize;
+        }
+        glVertex3f(radius, 0.0, height);
+        glEnd();
+}
+void draw_liquidtt(GLfloat radius,
+                   GLfloat height,GLfloat low,
+                   GLubyte R,
+                   GLubyte G,
+                   GLubyte B)
+{
+        GLfloat x              = 0.0;
+        GLfloat y              = 0.0;
+        GLfloat angle          = 0.0;
+        GLfloat angle_stepsize = 0.1;
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glDisable(GL_BLEND);
+        glBegin(GL_QUAD_STRIP);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(0.7,0.7,0.7);
+            glVertex3f(x, y , height);glColor3f(0.5,0.5,0.5);
+            glVertex3f(x, y , low);
+            angle = angle + angle_stepsize;
+        }
+        glEnd();
+        glColor4f(0.8,0.0,0.0,2.90);
+        glDisable(GL_BLEND);
+        glBegin(GL_POLYGON);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(0.6,0.6,0.6);
+            glVertex3f(x, y , height);
+            angle = angle + angle_stepsize;
+        }
+        glEnd();
+
+}/*
+void draw_liquidbeaker(GLfloat radius,
+                   GLfloat height,
+                   GLubyte R,
+                   GLubyte G,
+                   GLubyte B)
+{
+        GLfloat x              = 0.0;
+        GLfloat y              = 0.0;
+        GLfloat angle          = 0.0;
+        GLfloat angle_stepsize = 0.1;
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glDisable(GL_BLEND);
+        glBegin(GL_QUAD_STRIP);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(R+0.8,G+0.8,B+0.8);
+            glVertex3f(x, y , height);glColor3f(R+0.5,G+0.5,B+0.5);
+            glVertex3f(x, y , 0.0);
+            angle = angle + angle_stepsize;
+        }
+        glEnd();
+        glColor4f(R+0.8,G+0.8,B+0.8,2.90);
+        glDisable(GL_BLEND);
+        glBegin(GL_POLYGON);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(R+0.5,G+0.5,B+0.5);
+            glVertex3f(x, y , height);
+            angle = angle + angle_stepsize;
+        }
+        glEnd();
+        glColor4f(R+0.8,0.0,0.0,2.90);
+        glDisable(GL_BLEND);
+        glBegin(GL_POLYGON);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(R+0.5,G+0.5,B+0.5);
+            glVertex3f(x, y , 0);
+            angle = angle + angle_stepsize;
+        }
+        glEnd();
+}*/
+void draw_liquidbeaker(GLfloat radius,
+                   GLfloat height,
+                   GLubyte R,
+                   GLubyte G,
+                   GLubyte B)
+{
+        GLfloat x              = 0.0;
+        GLfloat y              = 0.0;
+        GLfloat angle          = 0.0;
+        GLfloat angle_stepsize = 0.1;
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glDisable(GL_BLEND);
+        glBegin(GL_QUAD_STRIP);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(R,G,B);
+            glVertex3f(x, y , height);glColor3f(red,g,b);
+            glVertex3f(x, y , 0.0);
+            angle = angle + angle_stepsize;
+        }
+        glEnd();
+        glColor4f(R+0.8,0,0,2.90);
+        glDisable(GL_BLEND);
+        glBegin(GL_POLYGON);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(cirr,cirg,cirb);
+            glVertex3f(x, y , height);
+            angle = angle + angle_stepsize;
+        }
+        glEnd();
+        glColor4f(R,0.0,0.0,2.90);
+        glDisable(GL_BLEND);
+        glBegin(GL_POLYGON);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(cirr,cirg,cirb);
+            glVertex3f(x, y , 0);
+            angle = angle + angle_stepsize;
+        }
+        glEnd();
+}
+void init2D(float r,float g,float b)
+{
+    glClearColor(r,g,b,0.0);
+    glMatrixMode(GL_PROJECTION);
+    gluOrtho2D(0.0,600.0,0.0,600.0);
+}
+void text()
+{
+ char f[180],a[250],b[150],c[250],d[150],e[150],g[350],h[250],j[350],t[950],u[350],x[950],y[950],Q[900],W[500],P[500];
+ int len0,len1,len2,len3,len4,len5,len6,len7,len8,len9,len10,len11,len12,len13,len14,len15,len20;
+ strcpy(f,"_________________________");
+ strcpy(P,"PREPARATION OF AQUA REGIA");
+ strcpy(W,"_____________________");
+ strcpy(c,"Melting point‎: ‎−42 °C (−44 °F; 231 K)");
+ strcpy(d,"Conc.HNO3");
+ strcpy(e,"HCL");
+ strcpy(g,"HNO3 +3HCL -----> AQUA REGIA");
+ strcpy(j,"Boiling point‎: ‎108 °C (226 °F; 381 K)");
+ strcpy(t,"Date");
+ strcpy(u,"Day  ");
+ strcpy(x,"Total Roll   :79");
+ strcpy(y,"Total present:60");
+ strcpy(Q,"CHEMISTRY ");
+
+ len0=strlen(f);
+ len3=strlen(c);
+ len4=strlen(d);
+ len5=strlen(e);
+ len6=strlen(g);
+ len7=strlen(h);
+ len8=strlen(j);
+
+ len9=strlen(t);
+ len10=strlen(u);
+ len11=strlen(x);
+ len12=strlen(y);
+len14=strlen(W);
+
+ len13=strlen(Q);
+ len15=strlen(P);
+
+
+ glColor3f(0,0,0);
+ glMatrixMode(GL_PROJECTION);
+ glPushMatrix();
+ glLoadIdentity();
+ gluOrtho2D(0,800,0,800);
+ glMatrixMode(GL_MODELVIEW);
+ glPushMatrix();
+ glLoadIdentity();
+ glRasterPos2i(270,670);
+ glColor3f(1,1,1);
+ glRasterPos2i(100,460);
+ for(int i=0;i<len3;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_8_BY_13,c[i]);
+ }
+
+ glRasterPos2i(230,570);
+ for(int i=0;i<len3;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,P[i]);
+ }
+
+ glColor3f(1,1,1);
+ glRasterPos2i(30,620);
+ for(int i=0;i<len4;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,t[i]);
+ }
+
+glColor3f(1,1,1);
+ glRasterPos2i(300,610);
+ for(int i=0;i<len4;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,Q[i]);
+ }
+
+ glColor3f(1,1,1);
+ glRasterPos2i(303,605);
+ for(int i=0;i<len4;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,W[i]);
+ }
+
+  glColor3f(1,1,1);
+ glRasterPos2i(355,605);
+ for(int i=0;i<len4;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,W[i]);
+ }
+
+
+
+ glColor3f(1,1,1);
+ glRasterPos2i(30,600);
+ for(int i=0;i<len4;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,u[i]);
+ }
+
+ glColor3f(1,1,1);
+ glRasterPos2i(700,620);
+ for(int i=0;i<len4;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,x[i]);
+ }
+
+
+ glColor3f(1,1,1);
+ glRasterPos2i(700,600);
+ for(int i=0;i<len4;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,y[i]);
+ }
+ glRasterPos2i(580,70);
+ for(int i=0;i<len4;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,d[i]);
+ }
+ glRasterPos2i(320,70);
+ for(int i=0;i<len5;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,e[i]);
+ }
+
+
+ glColor3f(1,1,1);
+ glRasterPos2i(100,500);
+ for(int i=0;i<len6;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,g[i]);
+ }
+    glColor3f(1,1,1);
+  glRasterPos2i(100,440);
+ for(int i=0;i<len8;++i)
+ {
+  glutBitmapCharacter(GLUT_BITMAP_8_BY_13,j[i]);
+ }
+ glPopMatrix();
+ glMatrixMode(GL_PROJECTION);
+ glPopMatrix();
+ glMatrixMode(GL_MODELVIEW);
+}
+void draw_glass(GLfloat radius,
+                   GLfloat height,
+                   GLubyte R,
+                   GLubyte G,
+                   GLubyte B)
+{
+        GLfloat x              = 0.0;
+        GLfloat y              = 0.0;
+        GLfloat angle          = 0.0;
+        GLfloat angle_stepsize = 0.1;
+        glEnable(GL_BLEND);
+        glColor4f(0.95,0.95,0.95,1.0);
+        glBegin(GL_QUAD_STRIP);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(0.7,0.7,0.7);
+            glVertex3f(x, y , height);glColor3f(0.3,0.3,0.3);
+            glVertex3f(x, y , 0.398);
+            angle = angle + angle_stepsize;
+        }
+        glVertex3f(radius, 0.0, height);
+        glVertex3f(radius, 0.0, 0.5);
+        glEnd();
+        glColor4f(0.85,0.85,0.85,2.90);
+        glBegin(GL_POLYGON);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(0.5,0.5,0.5);
+            glVertex3f(x, y , height);
+            angle = angle + angle_stepsize;
+        }
+        glVertex3f(radius, 0.0, height);
+        glEnd();
+}
+void draw_liquiddrain(GLfloat radius,      //function used to create small cylinders recursively to look as though the sol is from test tube is flowing down.
+                   GLfloat height,         //here, we are trying to create a single cylinder for the fluid. we call it recursively in update()
+                   GLubyte R,
+                   GLubyte G,
+                   GLubyte B)
+{
+        GLfloat x              = 0.0;
+        GLfloat y              = 0.0;
+        GLfloat angle          = 0.0;
+        GLfloat angle_stepsize = 0.1;
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glDisable(GL_BLEND);
+        glBegin(GL_QUAD_STRIP);
+        angle = 0.0;// low+=0.002;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(0.3,0.3,0.3);
+            glVertex3f(x, y , height);glColor3f(0.3,0.3,0.3);
+            glVertex3f(x, y , 0.2);
+            angle = angle + angle_stepsize;
+        }
+        glEnd();
+        glColor4f(0.7,0.0,0.0,2.90);
+        glDisable(GL_BLEND);
+        glBegin(GL_POLYGON);
+        angle = 0.0;
+        while( angle < 2*PI )
+        {
+            x = radius * cos(angle);
+            y = radius * sin(angle);glColor3f(0.3,0.3,0.3);
+            glVertex3f(x, y , height);
+            angle = angle + angle_stepsize;
+        }
+        glEnd();
+}
+
+void draw_liquiddrainsmall(GLfloat rad,
+                   GLfloat heit,
+                   GLfloat low,
+                   GLubyte R,
+                   GLubyte G,
+                   GLubyte B)
+{
+        GLfloat x              = 0.0;
+        GLfloat y              = 0.0;
+        GLfloat ang          = 0.0;
+        GLfloat angle_stepsize = 0.1;
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glDisable(GL_BLEND);
+        glBegin(GL_QUAD_STRIP);
+        ang = 0.0;
+        while( ang < 2*PI )
+        {
+            x = rad * cos(ang);
+            y = rad * sin(ang);glColor3f(0.8,0.8,0.8);
+            glVertex3f(x, y , heit);glColor3f(0.5,0.5,0.5);
+            glVertex3f(x, y , low);
+            ang = ang + angle_stepsize;
+        }
+        glEnd();
+        glColor4f(0.7,0.0,0.0,2.0);
+        glDisable(GL_BLEND);
+        glBegin(GL_POLYGON);
+        ang = 0.0;
+        while( ang < 2*PI )
+        {
+            x = rad * cos(ang);
+            y = rad * sin(ang);glColor3f(0.3,0.3,0.3);
+            glVertex3f(x, y , heit);
+            ang = ang + angle_stepsize;
+        }
+        glEnd();
+}
+
+void movetext(int value)  //to move the test tube up and then rotate to pour the liquid
+{
+        if(movx<0.9)
+       {
+           movx+= 0.001f;
+           movxc+=0.001f;
+           glutPostRedisplay();
+            glutTimerFunc(1, movetext, 0);
+        }
+       glutPostRedisplay();
+}
+void shadowmove(int value)  //to move the test tube up and then rotate to pour the liquid
+{
+        if(shady<=7.9)
+       {
+           shady-= 0.004f;
+           shadx-=0.002;;
+            glutPostRedisplay();
+            glutTimerFunc(1, shadowmove, 0);
+        }
+        glutPostRedisplay();
+}
+
+void update1(int v)  //to move the test tube up and then rotate to pour the liquid
+{
+         if(Z<1.43f)            //until z reaches a height of 1.32
+        {
+            Z += 0.009f;X-=0.0013f;
+            glutPostRedisplay();
+            glutTimerFunc(10, update1, 0);
+        }
+        if(Z>1.43)
+        {
+            glutPostRedisplay();
+            if(angle1<=140)
+            {
+                 angle1+=.4;
+                 glutPostRedisplay();
+                 glutTimerFunc(10, update1, 0);
+
+            }
+            if(h<50.0f)
+            {
+                r-=0.00001;
+                h+=.0033;
+                l+=0.0035;
+                glutPostRedisplay();
+
+            }
+        }
+}
+
+
+void update2(int val)  //to rotate the liquid in the beaker
+{
+         if(boxZ<1.33f)
+        {
+            boxZ += 0.04f;boxX-=0.0013f;
+            glutPostRedisplay();
+            glutTimerFunc(10, update2, 0);
+        }
+        if(boxZ>1.33)
+        {
+            glutPostRedisplay();
+            if(ang<=150)
+            {
+                angle+=.35;
+                 if(angle>240)
+                 {
+                    R+=0.004;red+=.004;cirr+=0.004;
+                    glutPostRedisplay();
+                  }
+                  glutPostRedisplay();
+                  glutTimerFunc(10, update2, 0);
+            }
+        }
+}
+
+int x=0,y=0;
+void mouse(int btn,int state,int x,int y)
+{
+
+    if(btn==GLUT_LEFT_BUTTON&&state==GLUT_DOWN)
+    {
+         movetext(0);
+    }
+    if(btn==GLUT_RIGHT_BUTTON&&state==GLUT_DOWN)
+    {
+        update1(0);
+        update2(0);
+        shadowmove(0);
+    }
+}
+void display(void)
+{
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+        glLoadIdentity();
+
+        glPushMatrix();
+        glTranslatef(0.2,0.4,-5.0);
+        glScalef(2.0,0.8,0.1);
+        glColor3f( 0.35,0.16,0.14);          //brown board
+        glutSolidCube(2.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.01,.4,-5.0);
+        glScalef(1.71,0.71,0.1);
+        glColor3f(0,0,0);          //black border
+        glutSolidCube(2.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.01,.4,-5.0);
+        glScalef(1.7,0.7,0.1);
+        glColor3f(0.13,0.37,0.15);          //green board
+        glutSolidCube(2.0);
+        glPopMatrix();
+
+///////////////////////// MediumWood = color red 0.65 green 0.50 blue 0.39
+////////////////////// 0.52 green 0.37 blue 0.26
+
+
+        glPushMatrix();
+        glTranslatef(-0.9,-0.32,-5.0);
+        glScalef(5.9,0.05,0.6);
+        glColor3f( 0.4,0.20,0.14);          //duster holder
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+        glPushMatrix();
+            glTranslatef(-0.2,-1.0,-4.0);
+            glRotatef(-90.0, 1.0,0.0, 0.0);
+            glPushMatrix();
+                draw_cylinder(0.4, 0.9, 255, 160, 100);     //for beaker
+            glPopMatrix();
+        glPopMatrix();
+
+
+        glPushMatrix();
+        glTranslatef(-0.01,-1.7,-5.0);
+        glScalef(1.4,0.6,1.0);
+        glRotatef(90,0,1.5,0);
+        glColor3f( 0.647059,0.164706,0.164706);             //for table
+        glutSolidCube(2.0);
+        glPopMatrix();
+
+
+
+         glPushMatrix();
+        glTranslatef(-0.27,-1.7,-5.5);
+        glScalef(1.13,0.6,1.1);
+        glRotatef(90,0,1.4,0);
+        glColor3f( 0.556863,0.137255,0.137255);             //for shadow beaker
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+
+ ////////////////////////////////////////
+
+
+        glPushMatrix();
+        glTranslatef(shadx,shady,-5);
+        glScalef(0.2,0.5,0.5);
+        glRotatef(150,0,1.5,0);
+        glColor3f( 0.556863,0.137255,0.137255);             //for shadow test tube
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+
+        glPushMatrix();
+        glTranslatef(-0.01,-1.68,-5.0);
+        glScalef(1.75,0.3,0.001);
+        glRotatef(-360,1,0,0);
+        glColor3f( 0.447059,0.164706,0.164706);             //for table 3d show
+        glutSolidCube(2.0);
+        glPopMatrix();
+
+
+//////////////////////////////////////
+
+        text();
+
+        glPushMatrix();
+        glTranslatef(movx,0.456,-5.0);                    //invisible cube
+        glScalef(1.6,0.2,0.1);
+      // glColor3f(1,0,0);
+        glColor3f(0.13,0.37,0.15);
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(movxc,movyc,-5.0);
+        glRotatef(30,1,0,0);
+        draw_cylinderwhite(0.02,0.17,1,1,1);                  //chalk
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(0.3,0.35,-5.0);                    //invisible cube for chalk
+        glScalef(0.6,0.2,0.1);
+        glColor3f(0.13,0.37,0.15);
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(0.72,-1.0,-4.0);
+        glRotatef(-90.0, 1.0, 0.0, 0.0);
+            glTranslatef(X,Y,Z);
+            glPushMatrix();
+                    glRotatef(angle1,1.0,-1.0,0.0);
+                        draw_cylinder(0.08,0.7,0,0,0);  //test tube
+                        draw_liquidtt(r,h,l,1,1,0);
+            glPopMatrix();
+        glPopMatrix();
+
+        glPushMatrix();
+            glTranslatef(-0.2,-1.0,-4.0);
+            glRotatef(-90.0, 1.0,0.0, 0.0);
+            glPushMatrix();
+                    glRotatef(angle,0.01,0.0,1.0);       //for liquid in beaker
+                        draw_liquidbeaker(0.4,0.5,R,G,B);
+                glPopMatrix();
+        glPopMatrix();
+
+        glPushMatrix();
+            glTranslatef(-0.25,-0.97,-5.0);
+            glRotatef(-90.0, 1.0, 0.4, 0.0);
+            glPushMatrix();
+                glPushMatrix();
+                    glRotatef(angle,1.2,0,2.5);
+                        draw_glass(0.02,1.5,255,160,100);  //for glass rod
+                glPopMatrix();
+            glPopMatrix();
+         glPopMatrix();
+
+        glFlush();
+
+
+       }
+void firstpg()
+{
+    char f[180],a[250],b[150],c[250],d[150],e[150],g[350],h[250],j[350],equ1[300],equ2[300],t[950],u[350],x[950],y[950],Q[900],W[500],gia[300],P[500],by[300],ins1[300],ins2[300],ins3[700];
+    int len0,len1,len2,len3,len4,len5,len6,len7,len8,len9,len10,len11,len12,equ1t,len13,equt2,len14,len15,len20,inst1,inst2,inst3,bytxt,giatxt;
+    strcpy(f,"_________________________");
+    strcpy(P,"PREPARATION OF AQUA REGIA");
+    strcpy(W,"_____________________");
+    strcpy(c,"SHRUTHI V - 1PE14CS136");
+    strcpy(by,"by");
+    strcpy(d,"Conc.HNO3");
+    strcpy(gia,"GIA");
+    strcpy(e,"HCL");
+    strcpy(equ1,"Equation");
+    strcpy(g,"and");
+    strcpy(j,"SHALINI SHEKAR - 1PE14CS127");
+    strcpy(t,"Date");
+    strcpy(equ2,"Initiate reaction");
+    strcpy(u,"Day  ");
+    strcpy(x,"Total Roll   :79");
+    strcpy(y,"Total present:60");
+    strcpy(Q,"CHEMISTRY ");
+    strcpy(ins1,"INSTRUCTIONS:");
+    strcpy(ins2,"Left click  -");
+    strcpy(ins3,"Right click -");
+    bytxt=strlen(by);
+    len0=strlen(f);
+    equ1t=strlen(equ1);
+    equt2=strlen(equ2);
+    len3=strlen(c);
+    len4=strlen(d);
+    len5=strlen(e);
+    len6=strlen(g);
+    len7=strlen(h);
+    giatxt=strlen(gia);
+    len8=strlen(j);
+    inst1=strlen(ins1);
+    inst2=strlen(ins2);
+    inst3=strlen(ins3);
+    len9=strlen(t);
+    len10=strlen(u);
+    len11=strlen(x);
+    len12=strlen(y);
+    len14=strlen(W);
+
+    len13=strlen(Q);
+    len15=strlen(P);
+
+
+    glColor3f(0,0,0);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0,800,0,800);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glRasterPos2i(270,670);
+
+    glColor3f(1,1,1);
+
+    glRasterPos2i(530,460);
+    for(int i=0;i<len3;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13,ins1[i]);
+    }
+
+    glRasterPos2i(530,440);
+    for(int i=0;i<len3;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13,ins2[i]);
+    }
+
+    glRasterPos2i(640,440);
+    for(int i=0;i<len3;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13,equ1[i]);
+    }
+
+
+    glRasterPos2i(530,425);
+    for(int i=0;i<len3;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13,ins3[i]);
+    }
+glRasterPos2i(640,425);
+    for(int i=0;i<len3;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13,equ2[i]);
+    }
+
+    glRasterPos2i(320,520);
+    for(int i=0;i<len3;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13,by[i]);
+    }
+
+    glRasterPos2i(250,495);
+    for(int i=0;i<len3;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13,c[i]);
+    }
+
+    glRasterPos2i(200,550);
+    for(int i=0;i<len3;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,P[i]);
+    }
+
+     glRasterPos2i(445,550);
+    for(int i=0;i<len3;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,gia[i]);
+    }
+
+    glColor3f(1,1,1);
+    glRasterPos2i(30,620);
+    for(int i=0;i<len4;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,t[i]);
+    }
+
+    glColor3f(1,1,1);
+    glRasterPos2i(300,610);
+    for(int i=0;i<len4;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,Q[i]);
+    }
+
+    glColor3f(1,1,1);
+    glRasterPos2i(303,605);
+    for(int i=0;i<len4;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,W[i]);
+    }
+
+    glColor3f(1,1,1);
+    glRasterPos2i(355,605);
+    for(int i=0;i<len4;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,W[i]);
+    }
+
+    glColor3f(1,1,1);
+    glRasterPos2i(30,600);
+    for(int i=0;i<len4;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,u[i]);
+    }
+
+    glColor3f(1,1,1);
+    glRasterPos2i(700,620);
+    for(int i=0;i<len4;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,x[i]);
+    }
+
+    glColor3f(1,1,1);
+    glRasterPos2i(700,600);
+    for(int i=0;i<len4;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,y[i]);
+    }
+    glColor3f(1,1,1);
+    glRasterPos2i(320,470);
+    for(int i=0;i<len6;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12,g[i]);
+    }
+    glColor3f(1,1,1);
+    glRasterPos2i(235,450);
+    for(int i=0;i<len8;++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13,j[i]);
+    }
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void display1(void)
+{
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    glPushMatrix();
+        glTranslatef(0.2,0.4,-5.0);
+        glScalef(2.0,0.8,0.1);
+        glColor3f( 0.35,0.16,0.14);          //brown board
+        glutSolidCube(2.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.01,.4,-5.0);
+        glScalef(1.71,0.71,0.1);
+        glColor3f(0,0,0);          //black border
+        glutSolidCube(2.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.01,.4,-5.0);
+        glScalef(1.7,0.7,0.1);
+        glColor3f(0.13,0.37,0.15);          //green board
+        glutSolidCube(2.0);
+        glPopMatrix();
+
+
+///////////////////////// MediumWood = color red 0.65 green 0.50 blue 0.39
+////////////////////// 0.52 green 0.37 blue 0.26
+
+
+        glPushMatrix();
+        glTranslatef(-0.9,-0.32,-5.0);
+        glScalef(5.9,0.05,0.6);
+        glColor3f( 0.4,0.20,0.14);          //duster holder
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.01,-1.7,-5.0);
+        glScalef(1.4,0.6,1.0);
+        glRotatef(90,0,1.5,0);
+        glColor3f( 0.647059,0.164706,0.164706);             //for table
+        glutSolidCube(2.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.01,-1.68,-5.0);
+        glScalef(1.75,0.3,0.001);
+        glRotatef(-360,1,0,0);
+        glColor3f( 0.447059,0.164706,0.164706);             //for table 3d show
+        glutSolidCube(2.0);
+        glPopMatrix();
+
+        firstpg();
+
+
+        glPushMatrix();
+        glTranslatef(1.48,0.26,-5.0);
+        glScalef(0.1,0.1,0);
+        glColor3f(0.13,0.37,0.15);          //green board
+        glutSolidCube(2.0);
+        glPopMatrix();
+
+    if(flags==1)
+    {
+        view=glutCreateSubWindow("Aqua Regia Prepartion!",0,0,800,800);
+        glutDisplayFunc(display);
+
+    }
+    glutSwapBuffers();
+}
+void keyboard(unsigned char key,int x,int y)
+{
+    if(key==13)
+    {
+        flags=1;
+    }
+}
+void reshape(int width, int height)
+{
+    if (width == 0 || height == 0) return;
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(40.0, (GLdouble)width/(GLdouble)height,0.5, 20.0);
+    glMatrixMode(GL_MODELVIEW);
+    glViewport(0, 0, width, height);
+}
+
+int main(int argc, char **argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowPosition(0.0,0.0);
+    glutInitWindowSize(800,800);
+    glutCreateWindow("Aqua regia preparation!");
+    glClearColor(0.7,0.7,0.7,0.7);
+    glutIgnoreKeyRepeat(1);
+    glutKeyboardFunc(keyboard);
+    glutDisplayFunc(display1);
+    init2D(0.85,0.598039,0.196078);
+    glutReshapeFunc(reshape);
+    glutMouseFunc(mouse);
+    glutMainLoop();
+    return 0;
+}
